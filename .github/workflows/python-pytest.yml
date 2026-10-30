@@ -1,8 +1,12 @@
 name: S3 workspace tests
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
+concurrency:
+  group: s3-workspace-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:

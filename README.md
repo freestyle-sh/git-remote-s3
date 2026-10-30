@@ -13,7 +13,7 @@ From a machine with access to this private repo:
 ```sh
 gh repo clone freestyle-sh/git-remote-s3
 cd git-remote-s3
-git checkout v0.5.0-preview.1
+git checkout v0.5.0-preview.2
 sudo ./install.sh
 ```
 

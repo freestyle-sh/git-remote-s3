@@ -39,7 +39,8 @@ def native_dirs(target, state, requested, installed):
         for n in names
         if PurePosixPath(n).name == "package.json"
     }
-    candidates = set(DEFAULT_LOCAL) | package_dirs | set(requested)
+    requested = {str(PurePosixPath(name)) for name in requested}
+    candidates = set(DEFAULT_LOCAL) | package_dirs | requested
     for name in sorted(candidates):
         path = PurePosixPath(name)
         if (
@@ -84,8 +85,13 @@ def native_dirs(target, state, requested, installed):
 
 
 def state_for(target, state_root=None):
-    root = Path(
-        state_root or os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local/share"))
+    root = (
+        Path(
+            state_root
+            or os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local/share"))
+        )
+        .expanduser()
+        .resolve()
     )
     return (
         root
