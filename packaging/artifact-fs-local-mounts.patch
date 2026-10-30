@@ -1,0 +1,21 @@
+diff --git a/internal/fusefs/fuse_linux.go b/internal/fusefs/fuse_linux.go
+--- a/internal/fusefs/fuse_linux.go
++++ b/internal/fusefs/fuse_linux.go
+@@ -1,10 +1,17 @@
+ package fusefs
+ 
+ import (
++	"os"
++
+ 	"github.com/jacobsa/fuse"
+ )
+ 
+ func platformMountConfig(cfg *fuse.MountConfig) {
+ 	// FUSEImplFuseT is the zero value and the correct choice for Linux.
+ 	cfg.FuseImpl = fuse.FUSEImplFuseT
++	// Native dependency bind mounts require the mount helper (root) to traverse
++	// the lower mount. Kernel default_permissions still enforces Unix modes.
++	if os.Getenv("ARTIFACT_FS_LOCAL_MOUNTS") == "1" {
++		cfg.Options = map[string]string{"allow_other": ""}
++	}
+ }

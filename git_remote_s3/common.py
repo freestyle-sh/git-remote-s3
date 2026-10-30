@@ -20,7 +20,7 @@ def parse_git_url(url: str) -> tuple[UriScheme, str, str, str]:
     """
     if url is None:
         return None, None, None, None
-    m = re.match(r"(s3|s3\+zip)://([^@]+@)?([a-z0-9][a-z0-9\.-]{2,62})/?(.+)?", url)
+    m = re.match(r"(s3|s3\+zip|s3\+lazy)://([^@]+@)?([a-z0-9][a-z0-9\.-]{2,62})/?(.+)?", url)
     if m is None or len(m.groups()) != 4:
         return None, None, None, None
     uri_scheme, profile, bucket, prefix = m.groups()
@@ -31,6 +31,8 @@ def parse_git_url(url: str) -> tuple[UriScheme, str, str, str]:
     if uri_scheme is not None:
         if uri_scheme == "s3":
             uri_scheme = UriScheme.S3
+        if uri_scheme == "s3+lazy":
+            uri_scheme = UriScheme.S3_LAZY
         if uri_scheme == "s3+zip":
             uri_scheme = UriScheme.S3_ZIP
 

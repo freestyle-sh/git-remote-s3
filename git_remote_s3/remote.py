@@ -76,7 +76,7 @@ class S3Remote:
             self.session = boto3.Session()
         self.s3 = self.session.client("s3")
         try:
-            self.s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
+            self.s3.list_objects_v2(Bucket=bucket, Prefix=prefix.rstrip("/") + "/")
         except ClientError as e:
             if e.response["Error"]["Code"] == "NoSuchBucket":
                 raise BucketNotFoundError(bucket)
@@ -97,13 +97,13 @@ class S3Remote:
             self.lock_ttl_seconds = DEFAULT_LOCK_TTL_SECONDS
 
     def list_refs(self, *, bucket: str, prefix: str) -> list:
-        res = self.s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
+        res = self.s3.list_objects_v2(Bucket=bucket, Prefix=prefix.rstrip("/") + "/")
         contents = res.get("Contents", [])
         next_token = res.get("NextContinuationToken", None)
 
         while next_token:
             res = self.s3.list_objects_v2(
-                Bucket=bucket, Prefix=prefix, ContinuationToken=next_token
+                Bucket=bucket, Prefix=prefix.rstrip("/") + "/", ContinuationToken=next_token
             )
             contents.extend(res.get("Contents", []))
             next_token = res.get("NextContinuationToken", None)
@@ -487,7 +487,8 @@ class S3Remote:
             futures = [executor.submit(self.cmd_fetch, cmd) for cmd in cmds]
 
             # Wait for all fetch commands to complete
-            concurrent.futures.wait(futures)
+            for future in futures:
+                future.result()
 
         logger.info(f"Completed processing {len(cmds)} fetch commands in parallel")
 

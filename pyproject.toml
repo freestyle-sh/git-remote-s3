@@ -1,6 +1,6 @@
 [project]
 name = "git-remote-s3"
-version = "0.3.2"
+version = "0.5.0.dev1"
 description = "A git remote helper for Amazon S3"
 authors = [{ "email" =  "Massimiliano Angelino <angmas@amazon.com>"} ]
 repository = "https://github.com/awslabs/git-remote-s3"
@@ -10,7 +10,7 @@ classifiers = [
     ]
 license = "Apache-2.0"
 readme = "README.md"
-requires-python = ">= 3.10"
+requires-python = ">= 3.11"
 dependencies = [
     "boto3 (>=1.42.24,<2.0.0)",
     "botocore (>=1.42.24,<2.0.0)",
@@ -21,6 +21,8 @@ dependencies = [
 git-remote-s3 = "git_remote_s3.remote:main"
 git-lfs-s3 = "git_remote_s3.lfs:main"
 git-s3 = "git_remote_s3.manage:main"
+"git-remote-s3+lazy" = "git_remote_s3.lazy:main"
+git-s3-workspace = "git_remote_s3.workspace:main"
 
 [tool.poetry.scripts]
 "git-remote-s3+zip" = { reference = "scripts/git-remote-s3+zip", type = "file" }

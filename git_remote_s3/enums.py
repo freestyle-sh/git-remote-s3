@@ -8,3 +8,4 @@ from enum import Enum
 class UriScheme(Enum):
     S3 = "s3"
     S3_ZIP = "s3+zip"
+    S3_LAZY = "s3+lazy"
