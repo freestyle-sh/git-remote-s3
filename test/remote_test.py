@@ -236,6 +236,7 @@ def test_cmd_push_no_force_unprotected_ancestor(
 @patch("git_remote_s3.git.rev_parse")
 @patch("git_remote_s3.git.bundle")
 @patch("boto3.Session.client")
+@patch("git_remote_s3.git.get_last_commit_message", new=lambda: "Test commit")
 def test_cmd_push_no_force_unprotected_ancestor_s3_zip(
     session_client_mock, bundle_mock, rev_parse_mock, is_ancestor_mock, archive_mock
 ):
@@ -328,6 +329,7 @@ def test_cmd_push_force_no_ancestor(
 @patch("git_remote_s3.git.rev_parse")
 @patch("git_remote_s3.git.bundle")
 @patch("boto3.Session.client")
+@patch("git_remote_s3.git.get_last_commit_message", new=lambda: "Test commit")
 def test_cmd_push_force_no_ancestor_s3_zip(
     session_client_mock, bundle_mock, rev_parse_mock, is_ancestor_mock, archive_mock
 ):
@@ -421,6 +423,7 @@ def test_cmd_push_empty_bucket(
 @patch("git_remote_s3.git.rev_parse")
 @patch("git_remote_s3.git.bundle")
 @patch("boto3.Session.client")
+@patch("git_remote_s3.git.get_last_commit_message", new=lambda: "Test commit")
 def test_cmd_push_empty_bucket_s3_zip(
     session_client_mock,
     bundle_mock,
